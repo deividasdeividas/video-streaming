@@ -59,6 +59,126 @@ const server = createServer((req, res) => {
     });
 
     fs.createReadStream(videoPath, { start, end }).pipe(res);
+  } else if (req.url === "/video1") {
+    const videoPath = path.join(__dirname, "vid1.mp4");
+
+    let stat;
+    try {
+      stat = fs.statSync(videoPath);
+    } catch {
+      return sendError(res, 404, "Video Not Found");
+    }
+    const fileSize = stat.size;
+
+    const range = req.headers.range;
+    if (!range) {
+      // No range header — send entire video
+      res.writeHead(200, {
+        "Content-Length": fileSize,
+        "Content-Type": "video/mp4",
+      });
+      return fs.createReadStream(videoPath).pipe(res);
+    }
+
+    const parts = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+    if (start >= fileSize || end >= fileSize || start > end) {
+      res.statusCode = 416; // Range Not Satisfiable
+      return res.end();
+    }
+
+    const chunkSize = end - start + 1;
+
+    res.writeHead(206, {
+      "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": chunkSize,
+      "Content-Type": "video/mp4",
+    });
+
+    fs.createReadStream(videoPath, { start, end }).pipe(res);
+  } else if (req.url === "/video2") {
+    const videoPath = path.join(__dirname, "vid2.mp4");
+
+    let stat;
+    try {
+      stat = fs.statSync(videoPath);
+    } catch {
+      return sendError(res, 404, "Video Not Found");
+    }
+    const fileSize = stat.size;
+
+    const range = req.headers.range;
+    if (!range) {
+      // No range header — send entire video
+      res.writeHead(200, {
+        "Content-Length": fileSize,
+        "Content-Type": "video/mp4",
+      });
+      return fs.createReadStream(videoPath).pipe(res);
+    }
+
+    const parts = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+    if (start >= fileSize || end >= fileSize || start > end) {
+      res.statusCode = 416; // Range Not Satisfiable
+      return res.end();
+    }
+
+    const chunkSize = end - start + 1;
+
+    res.writeHead(206, {
+      "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": chunkSize,
+      "Content-Type": "video/mp4",
+    });
+
+    fs.createReadStream(videoPath, { start, end }).pipe(res);
+  } else if (req.url === "/video3") {
+    const videoPath = path.join(__dirname, "vid3.mp4");
+
+    let stat;
+    try {
+      stat = fs.statSync(videoPath);
+    } catch {
+      return sendError(res, 404, "Video Not Found");
+    }
+    const fileSize = stat.size;
+
+    const range = req.headers.range;
+    if (!range) {
+      // No range header — send entire video
+      res.writeHead(200, {
+        "Content-Length": fileSize,
+        "Content-Type": "video/mp4",
+      });
+      return fs.createReadStream(videoPath).pipe(res);
+    }
+
+    const parts = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+    if (start >= fileSize || end >= fileSize || start > end) {
+      res.statusCode = 416; // Range Not Satisfiable
+      return res.end();
+    }
+
+    const chunkSize = end - start + 1;
+
+    res.writeHead(206, {
+      "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": chunkSize,
+      "Content-Type": "video/mp4",
+    });
+
+    fs.createReadStream(videoPath, { start, end }).pipe(res);
   } else {
     sendError(res, 404, "Not Found");
   }
