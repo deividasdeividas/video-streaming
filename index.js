@@ -20,7 +20,7 @@ const server = createServer((req, res) => {
       res.end(data);
     });
   } else if (req.url === "/video") {
-    const videoPath = path.join(__dirname, "Link Click - S01E01.mp4");
+    const videoPath = path.join(__dirname, "vid.mp4");
 
     let stat;
     try {
